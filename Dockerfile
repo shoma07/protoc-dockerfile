@@ -1,8 +1,7 @@
 FROM alpine:3.11 AS build-protoc
-ENV PROTOBUF_VERSION="3.11.4"
-ENV PROTOBUF_URL="https://github.com/protocolbuffers/protobuf/releases/download/v$PROTOBUF_VERSION/protobuf-cpp-$PROTOBUF_VERSION.tar.gz"
+ENV PROTOBUF_URL="https://github.com/protocolbuffers/protobuf/releases/download/v3.12.0-rc2/protobuf-cpp-3.12.0-rc-2.tar.gz"
 RUN apk add --no-cache curl autoconf automake libtool build-base && \
-    curl -L $PROTOBUF_URL | tar xvz -C /tmp && cd /tmp/protobuf-$PROTOBUF_VERSION && \
+    curl -L $PROTOBUF_URL | tar xvz -C /tmp && cd /tmp/protobuf-3.12.0-rc-2 && \
     ./autogen.sh && ./configure && make -j 4 && make check && make install
 
 FROM golang:alpine3.11 AS build-protoc-go
