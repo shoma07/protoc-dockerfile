@@ -1,7 +1,8 @@
 FROM alpine:3.11 AS build-protoc
-ENV PROTOBUF_URL="https://github.com/protocolbuffers/protobuf/releases/download/v3.12.0-rc2/protobuf-cpp-3.12.0-rc-2.tar.gz"
+ENV PROTOBUF_VERSION="3.12.2"
+ENV PROTOBUF_URL="https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VERSION}/protobuf-cpp-${PROTOBUF_VERSION}.tar.gz"
 RUN apk add --no-cache curl autoconf automake libtool build-base && \
-    curl -L $PROTOBUF_URL | tar xvz -C /tmp && cd /tmp/protobuf-3.12.0-rc-2 && \
+    curl -L $PROTOBUF_URL | tar xvz -C /tmp && cd /tmp/protobuf-${PROTOBUF_VERSION} && \
     ./autogen.sh && ./configure && make -j 4 && make check && make install
 
 FROM golang:alpine3.11 AS build-protoc-go
@@ -13,7 +14,7 @@ FROM node:13-alpine AS build-protoc-ts
 RUN npm install -g ts-protoc-gen
 
 FROM alpine:3.11 AS build-protoc-scala
-ENV SCALA_PROTOC_VERSION="0.10.2"
+ENV SCALA_PROTOC_VERSION="0.10.3"
 ENV SCALA_PROTOC_URL="https://github.com/scalapb/ScalaPB/releases/download/v$SCALA_PROTOC_VERSION/protoc-gen-scala-$SCALA_PROTOC_VERSION-linux-x86_64.zip"
 RUN apk add --no-cache curl && cd /tmp && \
     curl -L $SCALA_PROTOC_URL | unzip - && chmod +x protoc-gen-scala
